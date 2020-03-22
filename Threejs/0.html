@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three.js</title>
+    <meta charset="utf-8">
+    <!--(1)three.jsの読み込み-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+</head>
+<body>
+    <!--(2)HTML上で描画領域(canvas)を準備する-->
+    <canvas id="myCanvas"></canvas>
+
+    <script>
+        //(3)ページの読み込みを待ってinitを実行
+        window.addEventListener('load', init);
+
+        //(4)init関数でthree.js関連の初期化を行う
+        function init() {
+            //(5)描画領域のサイズを決めておく(あとで使う)
+            const width = 300;
+            const height = 200;
+
+            //(6)レンダラーを作成 (myCanvasに書くよ！)
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector('#myCanvas')
+            });
+
+            //(7)表示とディスプレイのピクセル密度に関する設定
+            renderer.setPixelRatio(window.devicePixelRatio);
+            //(8)描画の表示領域のサイズを決定
+            renderer.setSize(width, height);
+        }
+    </script>
+</body>
+</html>
+
