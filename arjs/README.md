@@ -3,3 +3,5 @@
 https://github.com/AR-js-org/AR.js
 <br>
 fset,fset3,isetファイルも一緒にuploadしてください。
+<br><br>
+使用するときはstone.jpgを印刷または表示する必要があります。
