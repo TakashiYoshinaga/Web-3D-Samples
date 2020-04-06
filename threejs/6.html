@@ -1,0 +1,48 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Hello, WebVR! • A-Frame</title>
+    <meta name="description" content="Hello, WebVR! • A-Frame">
+    <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  </head>
+  <body>
+    <script>//ページの読み込みを待ってinitを実行
+      window.addEventListener('load', init);
+
+      //init関数でthree.js関連の初期化を行う
+      function init() {
+        //A-Sceneのオブジェクト(=Three.jsのScene)を取得
+        const scene = document.querySelector('a-scene').object3D;
+        
+        
+        var loader=new THREE.TextureLoader();
+        loader.load(
+          'https://cdn.glitch.com/db43c26c-2509-45fa-ad6b-080227243858%2Fstar.png?v=1585291696995',
+          function(texture){
+            var material = new THREE.SpriteMaterial({map: texture,color:0xFFFFFF});
+                                                    
+            for(var i=0;i<1000;i++){
+              var plane = new THREE.Sprite(material);
+              plane.scale.set(0.1,0.1,1);
+              var x=Math.random()*10-5;
+              var y=Math.random()*10-5;
+              var z=Math.random()*10-5;
+              plane.position.set(x,y,z);
+              scene.add(plane);
+            }
+                  
+          }
+        );
+        
+        
+      }
+    </script>
+    <a-scene background="color: #000000">
+      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" shadow></a-box>
+      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" shadow></a-sphere>
+      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" shadow></a-cylinder>
+      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4" shadow></a-plane>
+    </a-scene>
+  </body>
+</html>
