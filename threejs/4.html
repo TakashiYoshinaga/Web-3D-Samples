@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three.js</title>
+    <meta charset="utf-8">
+    <!--three.jsの読み込み-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+</head>  
+
+<body>
+    <!--HTML上で描画領域(canvas)を準備する-->
+    <canvas id="myCanvas"></canvas>
+    
+    <script>
+        //ページの読み込みを待ってinitを実行
+        window.addEventListener('load', init);
+
+        //init関数でthree.js関連の初期化を行う
+        function init(){
+            //描画領域のサイズを決めておく(あとで使う)
+            const width = 300;
+            const height = 200;
+        
+            //レンダラーを作成 (myCanvasに書くよ！)
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector('#myCanvas')
+            });
+            //表示とディスプレイのピクセル密度に関する設定
+            renderer.setPixelRatio(window.devicePixelRatio);
+            //描画の表示領域のサイズを決定
+            renderer.setSize(width, height);
+        
+            //シーンを作成(=画面の奥の3Dの世界を作る)
+            const scene = new THREE.Scene();
+        
+            //視点の位置や向きを表すカメラを作成
+            //画角は垂直画角。水平画角は画面の縦横比から決定できる(参考 http://sand-storm.net/wordpress/?p=11561)
+            const camera = new THREE.PerspectiveCamera(45, width / height);  
+            camera.position.set(0, 0, 3);
+        
+            //箱を作成
+            //geometry:3D形状(頂点座標とか結ぶ順番とか)を表現するもの。
+            //本来であれば自分で頂点情報等を指定する必要があるが、基本的数系に関してはテンプレートがあるので活用
+            //参考：https://threejs.org/docs/index.html#api/en/geometries/BoxBufferGeometry
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            //material:見た目(色や質感など)に関する情報を保持。
+
+            /*さきほどまでのサンプルとMaterialの種類が異なるので要注意！*/
+            //MeshStandardMaterialは引数で色を指定可能。(例：カラーコードで赤を指定)
+            const material = new THREE.MeshStandardMaterial({color: 0xFF0000});
+            //形状、見た目の情報をもとにオブジェクトを作ってねというのがnew THREE.Mesh
+            const box = new THREE.Mesh(geometry, material);
+
+
+            /*補足！！*/
+            //あとから色を変えるなら下記の1行を有効にする。RGBの値はそれぞれ0～1
+            //box.material.color.setRGB(0.0,1.0,1.0);
+
+            /*補足！！*/
+            //テクスチャを貼るなら下記4行を有効。loadでは画像のurlを指定。
+            //const loader=new THREE.TextureLoader();
+            // var texture=loader.load("画像のURL");
+             //box.material.map=texture;
+             //box.material.color.setRGB(1.0,1.0,1.0);
+    
+
+            //3D空間に登場させる
+            scene.add(box);
+
+            /*重要！！*/
+            /*3D空間は真っ暗なので自己発光でもしない限り見えない。そのためライトを設定する必要がある。*/
+
+            //環境光を使って空間全体を明るくする
+            const ambientLight = new THREE.AmbientLight(0xFFFFFF);
+            scene.add(ambientLight);
+
+            //平行光の設定。指定した位置から光を当てることにより陰影がつく
+            //https://threejs.org/docs/index.html#api/en/lights/DirectionalLight
+            const directionalLight=new THREE.DirectionalLight(0xFFFFFF);
+            //光の位置
+            directionalLight.position.set(1,1,1);
+            scene.add(directionalLight);
+        
+        
+
+            //animationFuncを呼び出す
+            animationFunc();
+
+            //animationFuncを実装
+            function animationFunc(){
+                //現在の向きに対してx軸で0.02ラジアン足す
+                box.rotation.x+=0.02;
+                //現在の向きに対してy軸で0.05ラジアン足す
+                box.rotation.y+=0.05;
+                //描画
+                renderer.render(scene, camera); 
+                //描画の更新が終わったら再びanimationFuncを呼び出す。
+                requestAnimationFrame(animationFunc);
+            }
+       
+            //最後に描画してねという命令をする
+            renderer.render(scene, camera); 
+        }    
+    </script>
+  </body>
+</html>

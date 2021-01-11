@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Three.js</title>
+    <meta charset="utf-8">
+    <!--three.jsの読み込み-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+</head>  
+
+<body>
+    <!--HTML上で描画領域(canvas)を準備する-->
+    <canvas id="myCanvas"></canvas>
+    
+    <script>
+        //ページの読み込みを待ってinitを実行
+        window.addEventListener('load', init);
+
+        //init関数でthree.js関連の初期化を行う
+        function init(){
+            //描画領域のサイズを決めておく(あとで使う)
+            const width = 300;
+            const height = 200;
+        
+            //レンダラーを作成 (myCanvasに書くよ！)
+            const renderer = new THREE.WebGLRenderer({
+                canvas: document.querySelector('#myCanvas')
+            });
+            //表示とディスプレイのピクセル密度に関する設定
+            renderer.setPixelRatio(window.devicePixelRatio);
+            //描画の表示領域のサイズを決定
+            renderer.setSize(width, height);
+        
+            /*上記までの記述でWebサイト上にグラフィックスを描画する
+          　領域を設定することができた。だだし、3Dの表示にはさらに設定が必要。
+            */
+        
+            //(1)シーンを作成(=画面の奥の3Dの世界を作る)
+            const scene = new THREE.Scene();
+        
+            //(2)視点の位置や向きを表すカメラを作成
+            //画角は垂直画角
+            //水平画角は画面の縦横比から決定できる(参考 http://sand-storm.net/wordpress/?p=11561)
+            const camera = new THREE.PerspectiveCamera(45, width / height);  
+            camera.position.set(0, 0, 3);
+        
+            //(3)箱を作成
+            //geometry:3D形状(頂点座標とか結ぶ順番とか)を表現するもの。
+            //本来であれば自分で頂点情報等を指定する必要があるが、
+            //基本的数系に関してはテンプレートがあるので活用
+            //参考：https://threejs.org/docs/index.html#api/en/geometries/BoxBufferGeometry
+            const geometry = new THREE.BoxGeometry(1, 1, 1);
+            //material:見た目(色や質感など)に関する情報を保持。
+            //NormalMaterialというのは面の向き(法線,normal)を色として表示
+            const material = new THREE.MeshNormalMaterial();
+            //形状、見た目の情報をもとにオブジェクトを作ってねというのがnew THREE.Mesh
+            const box = new THREE.Mesh(geometry, material);
+        
+            //(4)3D空間に登場させる
+            scene.add(box);
+       
+            //(5)最後に描画してねという命令をする
+            renderer.render(scene, camera); 
+        }    
+    </script>
+  </body>
+</html>
